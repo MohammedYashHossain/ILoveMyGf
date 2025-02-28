@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Arisha ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6f2;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .heart-container:hover {
+            transform: scale(1.1);
+        }
+
+        .heart {
+            background-color: #ff3e6f;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform: rotate(45deg);
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 30px rgba(255, 62, 111, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .heart:before, .heart:after {
+            content: '';
+            background-color: #ff3e6f;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .heart:before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: -50%;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(45deg) scale(1); }
+            50% { transform: rotate(45deg) scale(1.1); }
+            100% { transform: rotate(45deg) scale(1); }
+        }
+
+        .bouquet-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            width: 300px;
+            height: 300px;
+            text-align: center;
+        }
+
+        .bouquet {
+            font-size: 250px;
+            line-height: 1;
+            animation: bouquetAppear 1s forwards;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        @keyframes bouquetAppear {
+            0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            color: #ff3e6f;
+            pointer-events: none;
+            z-index: 10;
+            animation: floatAround 5s linear infinite;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -30px) rotate(90deg); }
+            50% { transform: translate(0, -60px) rotate(180deg); }
+            75% { transform: translate(-50px, -30px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        .heart-fragment {
+            position: absolute;
+            background-color: #ff3e6f;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 1;
+        }
+
+        .message {
+            opacity: 0;
+            font-size: 2em;
+            color: #ff3e6f;
+            text-align: center;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .signature {
+            position: fixed;
+            bottom: 30px;
+            opacity: 0;
+            font-size: 1.2em;
+            color: #ff3e6f;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sparkle {
+            position: absolute;
+            background-color: white;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container" id="heart">
+        <div class="heart"></div>
+    </div>
+    <div class="bouquet-container" id="bouquet-container">
+        <div class="bouquet" id="bouquet">💐</div>
+    </div>
+    <div class="message" id="message">I love you Arisha</div>
+    <div class="signature" id="signature">- Love Yash <3</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heart = document.getElementById('heart');
+            const bouquetContainer = document.getElementById('bouquet-container');
+            const bouquet = document.getElementById('bouquet');
+            const message = document.getElementById('message');
+            const signature = document.getElementById('signature');
+            let clicked = false;
+
+            // Heart emojis for particles
+            const heartEmojis = ['❤️', '💕', '💖', '💗', '💓', '💘'];
+
+            heart.addEventListener('click', function(event) {
+                if (!clicked) {
+                    clicked = true;
+                    
+                    // Create initial sparkles
+                    createSparkles(event);
+                    
+                    // Start heart dissolve animation
+                    dissolveHeart();
+                    
+                    // Show bouquet after heart dissolves
+                    setTimeout(() => {
+                        heart.style.display = 'none';
+                        bouquetContainer.style.display = 'block';
+                        bouquet.style.animation = 'bouquetAppear 1s forwards';
+                        
+                        // Create heart particles around bouquet
+                        createHeartParticles();
+                    }, 1000);
+                    
+                    // Show message with animation
+                    setTimeout(() => {
+                        message.style.animation = 'fadeUp 2s forwards';
+                        message.style.opacity = '1';
+                    }, 2000);
+
+                    // Show signature with animation
+                    setTimeout(() => {
+                        signature.style.animation = 'fadeUp 2s forwards';
+                        signature.style.opacity = '1';
+                    }, 3000);
+                }
+            });
+
+            function dissolveHeart() {
+                const heartElement = heart.querySelector('.heart');
+                const rect = heartElement.getBoundingClientRect();
+                
+                // Create fragments that will fly outward
+                for (let i = 0; i < 50; i++) {
+                    const fragment = document.createElement('div');
+                    fragment.className = 'heart-fragment';
+                    
+                    // Position fragment at heart position
+                    fragment.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                    fragment.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                    
+                    // Random size
+                    const size = Math.random() * 10 + 5;
+                    fragment.style.width = size + 'px';
+                    fragment.style.height = size + 'px';
+                    
+                    // Random direction animation
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 200 + 50;
+                    const duration = Math.random() * 1 + 0.5;
+                    
+                    fragment.style.transition = `all ${duration}s ease-out`;
+                    
+                    document.body.appendChild(fragment);
+                    
+                    // Trigger animation after a small delay
+                    setTimeout(() => {
+                        fragment.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                        fragment.style.opacity = '0';
+                    }, 10);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        document.body.removeChild(fragment);
+                    }, duration * 1000);
+                }
+                
+                // Fade out the heart
+                heartElement.style.transition = 'opacity 1s';
+                heartElement.style.opacity = '0';
+            }
+
+            function createHeartParticles() {
+                for (let i = 0; i < 15; i++) {
+                    const heartParticle = document.createElement('div');
+                    heartParticle.className = 'heart-particle';
+                    
+                    // Set random heart emoji
+                    const heartEmoji = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heartParticle.textContent = heartEmoji;
+                    
+                    // Random size
+                    const size = Math.random() * 20 + 10;
+                    heartParticle.style.fontSize = size + 'px';
+                    
+                    // Position around bouquet
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 100 + 100;
+                    
+                    heartParticle.style.left = `calc(50% + ${Math.cos(angle) * distance}px)`;
+                    heartParticle.style.top = `calc(50% + ${Math.sin(angle) * distance}px)`;
+                    
+                    // Random animation delay and duration
+                    heartParticle.style.animationDelay = `${Math.random() * 2}s`;
+                    heartParticle.style.animationDuration = `${Math.random() * 3 + 4}s`;
+                    
+                    document.body.appendChild(heartParticle);
+                }
+            }
+
+            function createSparkles(event) {
+                const rect = heart.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                for (let i = 0; i < 20; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    
+                    // Random starting position around the heart
+                    const angle = Math.random() * 2 * Math.PI;
+                    const distance = Math.random() * 100 + 50;
+                    
+                    sparkle.style.left = (centerX + Math.cos(angle) * distance) + 'px';
+                    sparkle.style.top = (centerY + Math.sin(angle) * distance) + 'px';
+                    
+                    // Random color
+                    const hue = Math.floor(Math.random() * 60) + 300; // Pink-purple range
+                    sparkle.style.backgroundColor = `hsl(${hue}, 100%, 70%)`;
+                    
+                    // Random size
+                    const size = Math.random() * 6 + 3;
+                    sparkle.style.width = size + 'px';
+                    sparkle.style.height = size + 'px';
+                    
+                    // Animation
+                    sparkle.style.animation = `sparkle ${Math.random() * 1 + 0.5}s forwards`;
+                    
+                    document.body.appendChild(sparkle);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        document.body.removeChild(sparkle);
+                    }, 1500);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

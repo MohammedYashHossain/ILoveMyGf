@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yash's Love Projects</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ff9de2, #ffcbeb);
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin: 0;
+            color: #ff3e8e;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #ff5296;
+        }
+
+        .bubble-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .project-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 62, 142, 0.3);
+            pointer-events: auto;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: float 15s infinite linear;
+        }
+
+        .project-bubble:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 62, 142, 0.5);
+        }
+
+        .project-bubble .emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .project-bubble .name {
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5%, 10%) rotate(5deg); }
+            50% { transform: translate(10%, 0%) rotate(0deg); }
+            75% { transform: translate(5%, -10%) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .future-bubble {
+            opacity: 0.6;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .future-bubble .name {
+            font-style: italic;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #ff3e8e;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* Small decorative hearts floating in background */
+        .bg-heart {
+            position: absolute;
+            font-size: 1.5em;
+            opacity: 0.2;
+            animation: float-slow 20s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes float-slow {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(100px, 50px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>For Arsh</h1>
+        <div class="subtitle">I promise I'll get a job with my CS degree</div>
+    </div>
+
+    <div class="bubble-container" id="bubble-container">
+        <!-- Bubbles will be added here with JavaScript -->
+    </div>
+
+    <div class="footer">
+        Made with ❤️ by Yash (Your CS Boyfriend)
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bubbleContainer = document.getElementById('bubble-container');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Project data
+            const projects = [
+                {
+                    id: 'heart-bouquet',
+                    name: 'Heart to Bouquet',
+                    emoji: '❤️→💐',
+                    link: 'bouquet.html',
+                    active: true
+                },
+                {
+                    id: 'future-project1',
+                    name: 'Coming Soon',
+                    emoji: '🐈',
+                    link: '#',
+                    active: false
+                },
+            
+            ];
+            
+            // Create project bubbles
+            projects.forEach((project, index) => {
+                createProjectBubble(project, index);
+            });
+            
+            // Create background hearts
+            for (let i = 0; i < 15; i++) {
+                createBackgroundHeart();
+            }
+            
+            function createProjectBubble(project, index) {
+                const bubble = document.createElement('div');
+                bubble.className = 'project-bubble';
+                if (!project.active) {
+                    bubble.className += ' future-bubble';
+                }
+                bubble.id = project.id;
+                
+                // Size based on importance
+                const size = project.active ? 150 : 120;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                
+                // Calculate position - distribute around in a circle
+                const angle = (index / projects.length) * 2 * Math.PI;
+                const radius = Math.min(windowWidth, windowHeight) * 0.3;
+                
+                const left = windowWidth / 2 + Math.cos(angle) * radius - size / 2;
+                const top = windowHeight / 2 + Math.sin(angle) * radius - size / 2;
+                
+                bubble.style.left = left + 'px';
+                bubble.style.top = top + 'px';
+                
+                // Set animation delay to make movement varied
+                bubble.style.animationDelay = `-${index * 2}s`;
+                
+                // Content
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.textContent = project.emoji;
+                
+                const name = document.createElement('div');
+                name.className = 'name';
+                name.textContent = project.name;
+                
+                bubble.appendChild(emoji);
+                bubble.appendChild(name);
+                
+                // Click handler
+                bubble.addEventListener('click', function() {
+                    if (project.active) {
+                        // Pop animation
+                        this.style.animation = 'pop 0.5s forwards';
+                        
+                        // Navigate after animation
+                        setTimeout(() => {
+                            window.location.href = project.link;
+                        }, 500);
+                    } else {
+                        // Wiggle animation for future projects
+                        this.style.animation = 'none';
+                        setTimeout(() => {
+                            this.style.animation = `float 15s infinite linear`;
+                            this.style.animationDelay = `-${index * 2}s`;
+                        }, 10);
+                        
+                        // Show message
+                        alert('This project is coming soon baby 💕');
+                    }
+                });
+                
+                bubbleContainer.appendChild(bubble);
+            }
+            
+            function createBackgroundHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'bg-heart';
+                
+                // Random position
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                
+                // Random size
+                const size = Math.random() * 1 + 0.5;
+                heart.style.fontSize = size + 'em';
+                
+                // Random emoji
+                const heartEmojis = ['❤️', '💕', '💖', '💗', '💓', '💘'];
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                
+                // Random delay
+                heart.style.animationDelay = `-${Math.random() * 20}s`;
+                
+                document.body.appendChild(heart);
+            }
+            
+            // Make bubbles responsive on window resize
+            window.addEventListener('resize', function() {
+                const newWindowWidth = window.innerWidth;
+                const newWindowHeight = window.innerHeight;
+                const newRadius = Math.min(newWindowWidth, newWindowHeight) * 0.3;
+                
+                projects.forEach((project, index) => {
+                    const bubble = document.getElementById(project.id);
+                    const size = project.active ? 150 : 120;
+                    
+                    const angle = (index / projects.length) * 2 * Math.PI;
+                    const left = newWindowWidth / 2 + Math.cos(angle) * newRadius - size / 2;
+                    const top = newWindowHeight / 2 + Math.sin(angle) * newRadius - size / 2;
+                    
+                    bubble.style.left = left + 'px';
+                    bubble.style.top = top + 'px';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
