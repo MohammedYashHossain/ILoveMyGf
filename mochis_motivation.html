@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mochi's Motivation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #FFD1DC;
+            font-family: 'Comic Sans MS', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #FF69B4;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        input[type="submit"] {
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #FF1493;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mochi's Motivation</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <br>
+            <input type="submit" value="Generate Motivation">
+        </form>
+
+        <!-- You'll add dynamic image rendering here based on your backend -->
+    </div>
+</body>
+</html>
