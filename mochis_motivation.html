@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mochi's Motivation</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
             background-color: #FFD1DC;
@@ -14,54 +13,150 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
             text-align: center;
+            background-image: url('images/hearts-bg.png');
+            background-repeat: repeat;
         }
+        
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
             width: 90%;
             max-width: 500px;
+            border: 3px solid #FF69B4;
         }
+        
         h1 {
             color: #FF69B4;
             font-family: 'Comic Sans MS', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 0;
         }
-        input[type="file"] {
-            margin: 20px 0;
-            font-family: 'Comic Sans MS', cursive;
+        
+        .cat-image-container {
+            margin: 20px auto;
+            max-width: 100%;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        input[type="submit"] {
+        
+        #catImage {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .quote-container {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .motivate-button {
             background-color: #FF69B4;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: 30px;
+            padding: 12px 25px;
+            font-size: 18px;
             font-family: 'Comic Sans MS', cursive;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: #FF1493;
-        }
-        img {
-            max-width: 100%;
-            border-radius: 15px;
+            cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .motivate-button:hover {
+            background-color: #FF1493;
+            transform: scale(1.05);
+        }
+        
+        .home-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #FF69B4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #FFD1DC;
+            border-top: 5px solid #FF69B4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Mochi's Motivation</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" accept="image/*" required>
-            <br>
-            <input type="submit" value="Generate Motivation">
-        </form>
-
-        <!-- You'll add dynamic image rendering here based on your backend -->
+        
+        <div class="cat-image-container">
+            <img id="catImage" src="images/cats/default-cat.jpg" alt="Mochi">
+        </div>
+        
+        <div class="quote-container" id="quoteText">
+            Click the button below for some cat-tastic motivation!
+        </div>
+        
+        <div class="loading" id="loadingSpinner"></div>
+        
+        <button class="motivate-button" id="motivateButton">Motivate Me!</button>
+        
+        <a href="index.html" class="home-link">← Back to Home</a>
     </div>
+
+    <script>
+        document.getElementById('motivateButton').addEventListener('click', function() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const catImage = document.getElementById('catImage');
+            const quoteText = document.getElementById('quoteText');
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            // Fetch a random motivation
+            fetch('/api/mochis-motivation')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the image and quote
+                    catImage.src = data.image;
+                    quoteText.textContent = data.quote;
+                    
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    quoteText.textContent = "Mochi is napping. Try again later!";
+                    loadingSpinner.style.display = 'none';
+                });
+        });
+    </script>
 </body>
 </html>
