@@ -156,7 +156,7 @@
                     active: true
                 },
                 {
-                    id: 'future-project1',
+                    id: 'mochis-motivation',
                     name: 'Mochi\'s Motivation',
                     emoji: '🐈',
                     link: 'mochis_motivation.html',
@@ -172,7 +172,10 @@
             ];
             
             // Create project bubbles
+            console.log('Projects array:', projects);
+            console.log('Number of projects:', projects.length);
             projects.forEach((project, index) => {
+                console.log('Creating bubble for:', project.name, 'at index:', index);
                 createProjectBubble(project, index);
             });
             
@@ -182,6 +185,7 @@
             }
             
             function createProjectBubble(project, index) {
+                console.log('Creating bubble:', project.id, project.name);
                 const bubble = document.createElement('div');
                 bubble.className = 'project-bubble';
                 if (!project.active) {
@@ -195,14 +199,20 @@
                 bubble.style.height = size + 'px';
                 
                 // Calculate position - distribute around in a circle
-                const angle = (index / projects.length) * 2 * Math.PI;
-                const radius = Math.min(windowWidth, windowHeight) * 0.3;
+                // const angle = (index / projects.length) * 2 * Math.PI;
+                // const radius = Math.min(windowWidth, windowHeight) * 0.3;
                 
-                const left = windowWidth / 2 + Math.cos(angle) * radius - size / 2;
-                const top = windowHeight / 2 + Math.sin(angle) * radius - size / 2;
+                // const left = windowWidth / 2 + Math.cos(angle) * radius - size / 2;
+                // const top = windowHeight / 2 + Math.sin(angle) * radius - size / 2;
+                
+                // Temporary simple positioning for testing
+                const left = 100 + (index * 200);
+                const top = windowHeight / 2 - size / 2;
                 
                 bubble.style.left = left + 'px';
                 bubble.style.top = top + 'px';
+                
+                console.log('Bubble position:', left, top, 'for', project.name);
                 
                 // Set animation delay to make movement varied
                 bubble.style.animationDelay = `-${index * 2}s`;
@@ -243,6 +253,7 @@
                 });
                 
                 bubbleContainer.appendChild(bubble);
+                console.log('Bubble added to container:', project.name);
             }
             
             function createBackgroundHeart() {
