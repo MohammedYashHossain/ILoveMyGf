@@ -72,15 +72,51 @@
             transform: translateX(0);
         }
 
+        .timeline-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+            background-color: #f8f8f8;
+            display: block;
+        }
+
+        .timeline-image:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 105, 180, 0.5);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffe6f2, #ffb6c1);
+            border: 2px dashed rgba(255, 105, 180, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff69b4;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
         .timeline-content {
             background: white;
             border-radius: 20px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
             border: 2px solid rgba(255, 105, 180, 0.1);
             position: relative;
-            max-width: 400px;
+            max-width: 450px;
             transition: all 0.3s ease;
+            min-height: 200px;
         }
 
         .timeline-content:hover {
@@ -111,20 +147,6 @@
             line-height: 1.5;
             color: #555;
             margin-bottom: 15px;
-        }
-
-        .timeline-image {
-            width: 100%;
-            height: 200px;
-            border-radius: 15px;
-            object-fit: cover;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-image:hover {
-            transform: scale(1.05);
         }
 
         .timeline-dot {
@@ -349,17 +371,43 @@
                 const timelineItem = document.createElement('div');
                 timelineItem.className = 'timeline-item';
                 
+                let imageElement = '';
+                if (item.image) {
+                    imageElement = `
+                        <img src="${item.image}" 
+                             alt="Memory ${index + 1}" 
+                             class="timeline-image" 
+                             onload="console.log('Image loaded: ${item.image}')"
+                             onerror="this.style.display='none'; console.log('Image failed to load: ${item.image}'); this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            📸 Image: ${item.image}
+                        </div>
+                    `;
+                } else {
+                    imageElement = `
+                        <div class="image-placeholder">
+                            📅 No Image Available
+                        </div>
+                    `;
+                }
+                
                 const content = `
                     <div class="timeline-content">
                         <div class="timeline-date">${item.date}</div>
                         <div class="timeline-text">${item.text}</div>
-                        ${item.image ? `<img src="${item.image}" alt="Memory ${index + 1}" class="timeline-image" onerror="this.style.display='none'">` : ''}
+                        ${imageElement}
                     </div>
                     <div class="timeline-dot"></div>
                 `;
                 
                 timelineItem.innerHTML = content;
                 timelineContainer.appendChild(timelineItem);
+                
+                // Debug: Log the creation of each timeline item
+                console.log(`Created timeline item ${index + 1}: ${item.date} - ${item.text}`);
+                if (item.image) {
+                    console.log(`Image path: ${item.image}`);
+                }
             });
 
             // Remove loading message
