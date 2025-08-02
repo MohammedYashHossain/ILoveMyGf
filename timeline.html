@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Timeline 💕</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #ffe6f2;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .timeline-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #ff69b4, #ff1493);
+            transform: translateX(-50%);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item:nth-child(even) {
+            transform: translateX(100px);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+            border: 2px solid rgba(255, 105, 180, 0.1);
+            position: relative;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.25);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .timeline-date {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ff69b4;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(255, 105, 180, 0.1);
+        }
+
+        .timeline-text {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-image:hover {
+            transform: scale(1.05);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+            z-index: 10;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            left: calc(50% + 200px);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: calc(50% - 200px);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 105, 180, 0.2);
+            border: 2px solid #ff69b4;
+            color: #ff69b4;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 105, 180, 0.3);
+            transform: scale(1.05);
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5em;
+            opacity: 0.1;
+            animation: floatHeart 15s linear infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-item {
+                transform: translateX(0);
+                margin-left: 60px;
+            }
+
+            .timeline-item:nth-child(even) {
+                transform: translateX(0);
+            }
+
+            .timeline-content {
+                max-width: none;
+                margin: 0;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin: 0;
+            }
+
+            .timeline-dot {
+                left: 30px !important;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .timeline-container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #ff69b4;
+            font-size: 1.2em;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ff69b4;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Love Projects</a>
+    
+    <div class="header">
+        <h1>💕 Our Love Timeline 💕</h1>
+        <p>Every moment with you is a treasure</p>
+    </div>
+
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <div class="timeline-container">
+        <div class="timeline-line"></div>
+        <div id="timeline-content">
+            <div class="loading">Loading our beautiful memories...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineData = [
+                { date: "Sept 22, 2021", text: "Requested you on Instagram :O", image: "img1.jpg" },
+                { date: "Oct 1 2021", text: "Asked you to homecoming (No Image)" },
+                { date: "Oct 10 2021", text: "SIX FLAGS!", image: "img2.jpg" },
+                { date: "Oct 19 2021", text: "Multicultural Day!", image: "img3.jpg" },
+                { date: "Oct 23 2021", text: "Sophomore Homecoming !", image: "img4.jpg" },
+                { date: "Dec 21 2021", text: "<3", image: "img5.jpg" },
+                { date: "Feb 21 2022", text: ":P", image: "img6.jpg" },
+                { date: "June 28 2022", text: "YOUR 16TH !!", image: "img7.jpg" },
+                { date: "Aug 29 2022", text: "PHILY!!!", image: "img8.jpg" },
+                { date: "Sept 17 2022", text: "Pokémon GO to hoco ???", image: "img9.jpg" },
+                { date: "Oct 9 2022", text: "Run it back !", image: "img10.jpg" },
+                { date: "Dec 29 2022", text: "1 YEAR WOOO", image: "img11.jpg" },
+                { date: "Mar 10 2023", text: "I Play ;)", image: "img12.jpg" },
+                { date: "Apr 25 2023", text: "ACIT VB Game !!", image: "img13.jpg" },
+                { date: "May 21 2023", text: "HELLO I'D BE KITTYING MYSELF", image: "img14.jpg" },
+                { date: "Jun 1 2023", text: "PROM!!!", image: "img15.jpg" },
+                { date: "July 19 2023", text: "AQUARIUM FISHIES", image: "img16.jpg" },
+                { date: "Sept 6 2023", text: "SENIOR YEAR !!", image: "img17.jpg" },
+                { date: "Sept 30 2023", text: "HOCO GAME", image: "img18.jpg" },
+                { date: "Oct 15 2023", text: "Joyee's Mehendi", image: "img19.jpg" },
+                { date: "Oct 21 2023", text: "Ours When???", image: "img20.jpg" },
+                { date: "Dec 29 2023", text: "2 YEARS <3", image: "img21.jpg" },
+                { date: "Jan 12 2024", text: "THAT BLUE DRESSSSSS", image: "img22.jpg" },
+                { date: "Apr 20 2024", text: "BNY!", image: "img23.jpg" },
+                { date: "Apr 26 2024", text: "3 Man of the century??", image: "img24.jpg" },
+                { date: "May 3 2024", text: "RU RAH RAH", image: "img25.jpg" },
+                { date: "May 11 2024", text: "UN-BEARABLE", image: "img26.jpg" },
+                { date: "May 30 2024", text: "PROM^2", image: "img27.jpg" },
+                { date: "Jun 3 2024", text: "Boat Race Support <3", image: "img28.jpg" },
+                { date: "Jun 5 2024", text: "Someone Speaks Spanish???", image: "img29.jpg" },
+                { date: "June 13 2024", text: "Senior Year Lunch <3", image: "img30.jpg" },
+                { date: "June 19 2024", text: "Graduation Soon....", image: "img31.jpg" },
+                { date: "June 20 2024", text: "Officially High School Sweethearts", image: "img32.jpg" },
+                { date: "June 23 2024", text: "SURPRISE IM AN ADULT", image: "img33.jpg" },
+                { date: "June 28 2024", text: "SOMEONES GROWN!", image: "img34.jpg" },
+                { date: "July 2 2024", text: "My Babys Grad/Bday", image: "img35.jpg" },
+                { date: "July 28 2024", text: "I want a rong khela", image: "img36.jpg" },
+                { date: "Aug 6 2024", text: "Pickleball Addiction Started", image: "img37.jpg" },
+                { date: "Aug 26 2024", text: "Goodbye :c", image: "img38.jpg" },
+                { date: "Sept 1 2024", text: "HELLO!", image: "img39.jpg" },
+                { date: "Sept 28 2024", text: "DIDDY", image: "img40.jpg" },
+                { date: "Nov 11 2024", text: "DON TOLIVER", image: "img41.jpg" },
+                { date: "Nov 16 2024", text: "2 MAN NYC EDITION", image: "img42.jpg" },
+                { date: "Nov 23 2024", text: "HOLUD RAAT 2024", image: "img43.jpg" },
+                { date: "Dec 14 2024", text: "3 YEARS IN NYC", image: "img44.jpg" },
+                { date: "Feb 15 2025", text: "CHARITY FORMAL AND THAT BLUE DRESS", image: "img45.jpg" },
+                { date: "March 20 2025", text: "BNY^2", image: "img46.jpg" },
+                { date: "Apr 30 2025", text: "Bye Livi Towers :c", image: "img47.jpg" },
+                { date: "June 4 2025", text: "Picleball and Jersey Cow", image: "img48.jpg" },
+                { date: "June 24 2025", text: "19 with you <3", image: "img49.jpg" },
+                { date: "June 28 2025", text: "NASTY 19", image: "img50.jpg" }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-content');
+            const floatingHeartsContainer = document.getElementById('floating-hearts');
+
+            // Create timeline items
+            timelineData.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                
+                const content = `
+                    <div class="timeline-content">
+                        <div class="timeline-date">${item.date}</div>
+                        <div class="timeline-text">${item.text}</div>
+                        ${item.image ? `<img src="${item.image}" alt="Memory ${index + 1}" class="timeline-image" onerror="this.style.display='none'">` : ''}
+                    </div>
+                    <div class="timeline-dot"></div>
+                `;
+                
+                timelineItem.innerHTML = content;
+                timelineContainer.appendChild(timelineItem);
+            });
+
+            // Remove loading message
+            const loading = timelineContainer.querySelector('.loading');
+            if (loading) {
+                loading.remove();
+            }
+
+            // Create floating hearts
+            function createFloatingHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = ['💕', '💖', '💗', '💓', '💘', '❤️'][Math.floor(Math.random() * 6)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                
+                floatingHeartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 20000);
+            }
+
+            // Create floating hearts periodically
+            setInterval(createFloatingHeart, 3000);
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createFloatingHeart, i * 1000);
+            }
+
+            // Intersection Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe all timeline items
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
+
+            // Add some initial visible items
+            setTimeout(() => {
+                const firstItems = document.querySelectorAll('.timeline-item');
+                for (let i = 0; i < Math.min(3, firstItems.length); i++) {
+                    firstItems[i].classList.add('visible');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html> 
